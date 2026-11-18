@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="merapiSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#05060A"/>
+      <stop offset="50%" stop-color="#120D1A"/>
+      <stop offset="100%" stop-color="#2D1115"/>
+    </linearGradient>
+    <linearGradient id="merapiCone" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#261E2E"/>
+      <stop offset="50%" stop-color="#171620"/>
+      <stop offset="100%" stop-color="#0B0C10"/>
+    </linearGradient>
+    <linearGradient id="lavaFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFEB3B"/>
+      <stop offset="40%" stop-color="#FF5722"/>
+      <stop offset="100%" stop-color="#B71C1C"/>
+    </linearGradient>
+    <filter id="lavaGlow">
+      <feGaussianBlur stdDeviation="7" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#merapiSky)"/>
+
+  <!-- Stars -->
+  <circle cx="100" cy="50" r="1.5" fill="#FFF" opacity="0.8"/>
+  <circle cx="220" cy="90" r="1.2" fill="#FFF" opacity="0.6"/>
+  <circle cx="700" cy="40" r="1.7" fill="#FFF" opacity="0.9"/>
+  <circle cx="630" cy="110" r="1" fill="#FFF" opacity="0.5"/>
+
+  <!-- Merapi Conical Peak -->
+  <polygon points="100,500 395,190 415,190 710,500" fill="url(#merapiCone)"/>
+  
+  <!-- Chiseled Ravine Slopes -->
+  <path d="M395,190 Q340,320 220,500" stroke="#FF5722" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M415,190 Q470,320 590,500" stroke="#FF5722" stroke-width="2" fill="none" opacity="0.3"/>
+
+  <!-- Southwest Active Lava Dome (Kubah Barat Daya) -->
+  <ellipse cx="395" cy="195" rx="20" ry="12" fill="#FF5722" filter="url(#lavaGlow)"/>
+  <ellipse cx="395" cy="195" rx="14" ry="7" fill="#FFF59D"/>
+
+  <!-- Wedhus Gembel (Pyroclastic Density Current Cloud) -->
+  <path d="M390,200 Q360,240 330,270 Q290,300 270,360 Q240,410 190,460 L240,490 Q310,430 350,370 Q380,320 405,240 Z" fill="#3E343A" opacity="0.85"/>
+  <circle cx="340" cy="280" r="35" fill="#4A3D44" opacity="0.8"/>
+  <circle cx="290" cy="340" r="45" fill="#3A3036" opacity="0.85"/>
+  <circle cx="230" cy="410" r="55" fill="#2E262A" opacity="0.9"/>
+
+  <!-- Incandescent Lava Avalanche in Kali Bebeng (Luncuran Lava Pijar) -->
+  <path d="M392,205 Q375,260 345,310 Q320,360 275,410 Q240,460 210,500" stroke="url(#lavaFlow)" stroke-width="5" fill="none" filter="url(#lavaGlow)"/>
+  <path d="M392,205 Q375,260 345,310 Q320,360 275,410 Q240,460 210,500" stroke="#FFF" stroke-width="1.8" fill="none"/>
+
+  <!-- Kali Krasak Secondary Lava Branch -->
+  <path d="M345,310 Q320,340 300,390 Q280,450 270,500" stroke="#FF5722" stroke-width="3" fill="none" filter="url(#lavaGlow)"/>
+
+  <!-- Foreground Observation Station / Pines Silhouette -->
+  <polygon points="0,500 0,470 120,445 280,465 520,440 800,460 800,500" fill="#08080C"/>
+
+  <!-- Observation Tower Antenna Silhouette -->
+  <line x1="720" y1="460" x2="720" y2="400" stroke="#424242" stroke-width="2.5"/>
+  <circle cx="720" cy="398" r="3" fill="#F44336" filter="url(#lavaGlow)"/>
+
+  <!-- Badge -->
+  <rect x="25" y="25" width="220" height="34" rx="8" fill="#F97316" opacity="0.95"/>
+  <text x="35" y="47" fill="#FFFFFF" font-family="sans-serif" font-weight="900" font-size="13" letter-spacing="1">SIAGA (LEVEL III) • 2026</text>
+</svg>

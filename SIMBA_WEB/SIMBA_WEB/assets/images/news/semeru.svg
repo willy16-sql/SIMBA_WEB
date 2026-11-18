@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="semeruSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="60%" stop-color="#1B1C2A"/>
+      <stop offset="100%" stop-color="#341E22"/>
+    </linearGradient>
+    <linearGradient id="semeruMtn" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C2E3C"/>
+      <stop offset="50%" stop-color="#191B24"/>
+      <stop offset="100%" stop-color="#0C0D12"/>
+    </linearGradient>
+    <linearGradient id="besukKobokan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3E2723"/>
+      <stop offset="100%" stop-color="#1B1412"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#semeruSky)"/>
+
+  <!-- Jonggring Saloko Eruption Column -->
+  <path d="M400,175 Q360,110 330,70 Q310,25 380,10 Q450,-5 490,30 Q530,70 480,120 Q440,155 420,175 Z" fill="#4B4752" opacity="0.9"/>
+  <circle cx="365" cy="55" r="55" fill="#5A5562" opacity="0.8"/>
+  <circle cx="450" cy="45" r="65" fill="#65606E" opacity="0.85"/>
+  <circle cx="410" cy="95" r="45" fill="#3D3A44" opacity="0.8"/>
+
+  <!-- Semeru Mahameru Conical Peak (Stratovolcano) -->
+  <polygon points="80,500 395,175 425,175 730,500" fill="url(#semeruMtn)"/>
+  
+  <!-- Scree Slopes / Jalur Pasir Puncak Mahameru -->
+  <polygon points="395,175 425,175 460,330 360,330" fill="#20222C" opacity="0.8"/>
+  <path d="M410,180 L410,350" stroke="#FF5722" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4"/>
+
+  <!-- Besuk Kobokan Canyon & Lahar Valley -->
+  <path d="M410,330 Q450,380 500,420 Q560,460 620,500 L500,500 Q430,460 380,420 Q350,380 410,330 Z" fill="url(#besukKobokan)"/>
+
+  <!-- Gladak Perak Bridge Silhouette Concept -->
+  <line x1="450" y1="460" x2="650" y2="460" stroke="#757575" stroke-width="4"/>
+  <line x1="500" y1="460" x2="520" y2="495" stroke="#616161" stroke-width="3"/>
+  <line x1="600" y1="460" x2="580" y2="495" stroke="#616161" stroke-width="3"/>
+
+  <!-- Foreground Plains Lumajang -->
+  <polygon points="0,500 0,460 250,440 500,460 800,445 800,500" fill="#08080C"/>
+
+  <!-- Badge -->
+  <rect x="25" y="25" width="220" height="34" rx="8" fill="#F97316" opacity="0.95"/>
+  <text x="35" y="47" fill="#FFFFFF" font-family="sans-serif" font-weight="900" font-size="13" letter-spacing="1">SIAGA (LEVEL III) • 2026</text>
+</svg>
