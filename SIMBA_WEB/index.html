@@ -43,8 +43,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
 
-  <!-- Custom Volcanic Dark Theme Styles (Cache-Busting v=4.0) -->
-  <link rel="stylesheet" href="assets/css/custom.css?v=4.0">
+  <!-- Custom Volcanic Dark Theme Styles (Cache-Busting v=4.4) -->
+  <link rel="stylesheet" href="assets/css/custom.css?v=4.4">
 </head>
 <body class="bg-[#0B0C10] text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
 
@@ -70,13 +70,17 @@
 
       <!-- Desktop Nav Menu -->
       <nav class="hidden md:flex items-center gap-1 lg:gap-2">
-        <a href="#home" data-view="welcome" class="nav-link px-3.5 py-2 rounded-xl text-xs lg:text-sm font-medium text-orange-500 font-bold transition">
+        <a href="#home" data-view="welcome" class="nav-link px-3 py-2 rounded-xl text-xs lg:text-sm font-medium text-orange-500 font-bold transition">
           Beranda
         </a>
-        <a href="#peta" data-view="map" class="nav-link px-3.5 py-2 rounded-xl text-xs lg:text-sm font-medium text-zinc-400 hover:text-white transition">
+        <a href="#peta" data-view="map" class="nav-link px-3 py-2 rounded-xl text-xs lg:text-sm font-medium text-zinc-400 hover:text-white transition">
           Peta Interaktif
         </a>
-        <a href="#edukasi" data-view="education" class="nav-link px-3.5 py-2 rounded-xl text-xs lg:text-sm font-medium text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+        <a href="#berita" data-view="news" class="nav-link px-3 py-2 rounded-xl text-xs lg:text-sm font-medium text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+          <span>Berita Bencana 2026</span>
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-alert-pulse"></span>
+        </a>
+        <a href="#edukasi" data-view="education" class="nav-link px-3 py-2 rounded-xl text-xs lg:text-sm font-medium text-zinc-400 hover:text-white transition flex items-center gap-1.5">
           <span>Edukasi Vulkanologi</span>
           <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-zinc-800 text-orange-400 border border-zinc-700">PPT</span>
         </a>
@@ -101,6 +105,10 @@
     <div id="mobile-nav" class="hidden md:hidden px-4 pt-2 pb-4 bg-zinc-950 border-b border-zinc-800 space-y-1">
       <a href="#home" data-view="welcome" class="block px-3 py-2 rounded-lg text-sm font-medium text-orange-400 bg-zinc-900">Beranda</a>
       <a href="#peta" data-view="map" class="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900">Peta Interaktif</a>
+      <a href="#berita" data-view="news" class="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 flex items-center justify-between">
+        <span>Berita Bencana 2026</span>
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+      </a>
       <a href="#edukasi" data-view="education" class="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900">Edukasi Vulkanologi (Materi PPT)</a>
     </div>
   </header>
@@ -121,8 +129,32 @@
       <!-- Radial Vignette Overlay untuk Kontras Teks -->
       <div class="absolute inset-0 z-0 bg-radial-gradient from-transparent via-[#0B0C10]/40 to-[#0B0C10] pointer-events-none"></div>
 
+      <!-- Cinematic Stage Indicator Pill during Intro -->
+      <div id="volcano-cinematic-badge" class="absolute top-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-950/90 backdrop-blur-md border border-zinc-800 text-xs text-zinc-300 font-mono tracking-wider shadow-2xl transition-all duration-500 pointer-events-auto">
+        <span id="cinematic-phase-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="cinematic-phase-text" class="font-bold">FASE 1: NORMAL • GUNUNG TENANG</span>
+      </div>
+
+      <!-- Floating Replay / Skip / Sound Controls for Cinematic Experience -->
+      <div class="absolute top-5 right-4 sm:right-6 z-20 flex items-center gap-2 pointer-events-auto">
+        <!-- Sound FX Toggle Button -->
+        <button id="btn-sound-toggle" class="px-3 py-1.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-semibold text-zinc-300 hover:text-white backdrop-blur-md transition flex items-center gap-1.5 shadow-lg" title="Aktifkan / Matikan Efek Suara Erupsi">
+          <span id="sound-toggle-icon">🔊</span>
+          <span id="sound-toggle-label" class="hidden sm:inline">Suara: ON</span>
+        </button>
+
+        <button id="btn-skip-intro" class="px-3.5 py-1.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-semibold text-zinc-300 hover:text-white backdrop-blur-md transition flex items-center gap-1.5 shadow-lg" title="Langsung lewati ke tampilan beranda">
+          <span>Lewati</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+        </button>
+        <button id="btn-replay-eruption" class="hidden px-3.5 py-1.5 rounded-xl bg-orange-600/90 hover:bg-orange-500 border border-orange-500/80 text-xs font-bold text-white backdrop-blur-md transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,87,34,0.4)]" title="Putar ulang animasi erupsi gunung berapi">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Ulangi Letusan 🌋</span>
+        </button>
+      </div>
+
       <!-- Hero Content Foreground -->
-      <div class="relative z-10 max-w-4xl mx-auto py-8 sm:py-10 flex flex-col items-center">
+      <div id="welcome-hero-content" class="welcome-hero-hidden relative z-10 max-w-4xl mx-auto py-8 sm:py-10 flex flex-col items-center">
         
         <!-- Live Status Pill Badge -->
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-orange-500/40 shadow-[0_0_20px_rgba(255,87,34,0.25)] mb-5">
@@ -276,7 +308,24 @@
     </section>
 
     <!-- ==========================================
-         VIEW 3: EDUCATION DIGITAL SLIDES VIEW (MATERI PPT)
+         VIEW 3: NEWS & DOCUMENTATION VIEW (BERITA 2026)
+         ========================================== -->
+    <section id="view-news" class="view-section overflow-y-auto bg-gradient-to-b from-zinc-950 via-[#0B0C10] to-zinc-950 min-h-[calc(100vh-64px)] pb-16">
+      
+      <!-- News Header & Filter Component -->
+      <div id="news-header-container" class="w-full"></div>
+
+      <!-- News Cards Container (Full-Width Horizontal Layout) -->
+      <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-4">
+        <div id="news-cards-grid" class="w-full flex flex-col gap-6">
+          <!-- Rendered dynamically by SimbaNewsEngine -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: EDUCATION DIGITAL SLIDES VIEW (MATERI PPT)
          ========================================== -->
     <section id="view-education" class="view-section overflow-y-auto bg-gradient-to-b from-zinc-950 via-[#0B0C10] to-zinc-950 py-6">
       <div id="education-slides-wrapper" class="w-full">
@@ -361,26 +410,51 @@
   </div>
 
   <!-- ==========================================
+       MODAL ARTIKEL BERITA & GALERI DOKUMENTASI 2026
+       ========================================== -->
+  <!-- Backdrop -->
+  <div id="news-modal-backdrop" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 transition-opacity"></div>
+
+  <!-- Modal Dialog -->
+  <div id="news-modal-wrapper" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative bg-zinc-950 border border-zinc-800 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] my-auto">
+      
+      <!-- Close Button -->
+      <button id="news-modal-close-btn" class="absolute top-4 right-4 z-20 p-2 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-400 hover:text-white transition shadow-md border border-zinc-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Scrollable Modal Body -->
+      <div id="news-modal-content" class="p-6 sm:p-8 overflow-y-auto">
+        <!-- Rendered dynamically by SimbaNewsEngine -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
        EXTERNAL & APPLICATION SCRIPTS
        ========================================== -->
   <!-- Leaflet & MarkerCluster Libraries (cdnjs) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 
-  <!-- Application Datasets (v=4.0) -->
-  <script src="assets/js/data/volcanoes.js?v=4.0"></script>
-  <script src="assets/js/data/slides-content.js?v=4.0"></script>
-  <script src="assets/js/data/emergency-contacts.js?v=4.0"></script>
+  <!-- Application Datasets (v=4.4) -->
+  <script src="assets/js/data/volcanoes.js?v=4.4"></script>
+  <script src="assets/js/data/news-2026.js?v=4.4"></script>
+  <script src="assets/js/data/slides-content.js?v=4.4"></script>
+  <script src="assets/js/data/emergency-contacts.js?v=4.4"></script>
 
-  <!-- Application Modules (v=4.0) -->
-  <script src="assets/js/canvas-eruption.js?v=4.0"></script>
-  <script src="assets/js/map.js?v=4.0"></script>
-  <script src="assets/js/detail.js?v=4.0"></script>
-  <script src="assets/js/slides.js?v=4.0"></script>
-  <script src="assets/js/emergency.js?v=4.0"></script>
+  <!-- Application Modules (v=4.4) -->
+  <script src="assets/js/canvas-eruption.js?v=4.4"></script>
+  <script src="assets/js/map.js?v=4.4"></script>
+  <script src="assets/js/news.js?v=4.4"></script>
+  <script src="assets/js/detail.js?v=4.4"></script>
+  <script src="assets/js/slides.js?v=4.4"></script>
+  <script src="assets/js/emergency.js?v=4.4"></script>
 
-  <!-- App Bootstrap (v=4.0) -->
-  <script src="assets/js/app.js?v=4.0"></script>
+  <!-- App Bootstrap (v=4.4) -->
+  <script src="assets/js/app.js?v=4.4"></script>
 
 </body>
 </html>

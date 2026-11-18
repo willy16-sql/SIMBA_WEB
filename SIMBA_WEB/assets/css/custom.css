@@ -110,6 +110,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   justify-content: flex-start;
 }
 
+#view-news.active {
+  width: 100% !important;
+  min-height: calc(100vh - 64px);
+  position: relative;
+  overflow-y: auto;
+  flex-direction: column !important;
+  justify-content: flex-start;
+  align-items: stretch !important;
+}
+
 /* ==========================================================================
    LEAFLET MAP CONTAINER
    ========================================================================== */
@@ -258,3 +268,52 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ==========================================================================
+   CINEMATIC ERUPTION & HERO TRANSITION (WELCOME SCREEN)
+   ========================================================================== */
+.welcome-hero-hidden {
+  opacity: 0 !important;
+  transform: translateY(40px) scale(0.96) !important;
+  filter: blur(10px) !important;
+  pointer-events: none !important;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.welcome-hero-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  filter: blur(0px) !important;
+  pointer-events: auto !important;
+  transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Staggered entrance for hero elements */
+.welcome-hero-visible > * {
+  animation: heroElementFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.welcome-hero-visible > *:nth-child(1) { animation-delay: 0.10s; }
+.welcome-hero-visible > *:nth-child(2) { animation-delay: 0.25s; }
+.welcome-hero-visible > *:nth-child(3) { animation-delay: 0.40s; }
+.welcome-hero-visible > *:nth-child(4) { animation-delay: 0.55s; }
+.welcome-hero-visible > *:nth-child(5) { animation-delay: 0.70s; }
+
+@keyframes heroElementFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#volcano-cinematic-badge {
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 87, 34, 0.25);
+}
+

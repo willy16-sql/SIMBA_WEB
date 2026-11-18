@@ -16,8 +16,9 @@ class SimbaApp {
   }
 
   init() {
-    // 1. Inisialisasi Modul Canvas Letusan
+    // 1. Inisialisasi Modul Canvas Letusan Sinematik
     this.canvasEngine = new VolcanicEruptionEngine('volcano-canvas');
+    this.initCinematicIntro();
 
     // 2. Inisialisasi Modul Peta Leaflet
     this.mapController = new SimbaMap('leaflet-map');
@@ -28,18 +29,24 @@ class SimbaApp {
     // 4. Inisialisasi Modul Slides Edukasi
     this.slidesEngine = new SimbaSlidesEngine('education-slides-wrapper');
 
-    // 5. Inisialisasi Modal Kontak Darurat
+    // 5. Inisialisasi Modul Berita & Dokumentasi 2026
+    if (typeof SimbaNewsEngine === 'function') {
+      this.newsEngine = new SimbaNewsEngine('news-cards-grid', 'news-modal-wrapper');
+      window.SIMBA_NEWS = this.newsEngine;
+    }
+
+    // 6. Inisialisasi Modal Kontak Darurat
     this.emergencyModal = new EmergencyModal('emergency-modal', 'emergency-backdrop');
 
-    // 6. Pasang Event Listeners Navigasi
+    // 7. Pasang Event Listeners Navigasi
     this.bindNavigationEvents();
     this.bindSearchAndFilterEvents();
 
-    // 7. Dengarkan Hash URL & Inisialisasi Tampilan Awal
+    // 8. Dengarkan Hash URL & Inisialisasi Tampilan Awal
     window.addEventListener('hashchange', () => this.handleHashChange());
     this.handleHashChange();
 
-    // 8. Integrasi Database MySQL Dinamis (Opsional/Fallback)
+    // 9. Integrasi Database MySQL Dinamis (Opsional/Fallback)
     this.syncFromDatabaseAPI();
   }
 
@@ -49,15 +56,84 @@ class SimbaApp {
       if (res.ok) {
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
-          window.SIMBA_VOLCANOES = json.data;
-          if (this.mapController) {
-            this.mapController.renderVolcanoMarkers();
+          // Hanya timpa jika data dari database MySQL lebih banyak atau sama lengkapnya
+          const currentCount = (window.SIMBA_VOLCANOES || []).length;
+          if (json.data.length >= currentCount) {
+            window.SIMBA_VOLCANOES = json.data;
+            if (this.mapController) {
+              this.mapController.renderVolcanoMarkers();
+            }
+            console.log('[SIMBA] Terhubung & sinkron dengan database MySQL simba_db (' + json.total + ' gunung api)');
+          } else {
+            console.log(`[SIMBA] Database MySQL saat ini berisi ${json.data.length} gunung api. Mempertahankan ${currentCount} data gunung api lengkap SIMBA.`);
           }
-          console.log('[SIMBA] Terhubung & sinkron dengan database MySQL simba_db (' + json.total + ' gunung api)');
         }
       }
     } catch (e) {
-      console.log('[SIMBA] Menggunakan dataset lokal mandiri (fallback)');
+      console.log('[SIMBA] Menggunakan dataset lokal mandiri (fallback: 103 gunung api)');
+    }
+  }
+
+  initCinematicIntro() {
+    if (!this.canvasEngine) return;
+
+    const badge = document.getElementById('volcano-cinematic-badge');
+    const badgeText = document.getElementById('cinematic-phase-text');
+    const badgeDot = document.getElementById('cinematic-phase-dot');
+    const heroContent = document.getElementById('welcome-hero-content');
+    const skipBtn = document.getElementById('btn-skip-intro');
+    const replayBtn = document.getElementById('btn-replay-eruption');
+
+    // Callback perubahan fase letusan (Diam -> Berasap -> Memerah -> Meledak)
+    this.canvasEngine.onStateChange = (phase) => {
+      if (badge && badgeText && badgeDot) {
+        if (phase.key === 'active') {
+          badge.classList.add('opacity-0', 'pointer-events-none');
+        } else {
+          badge.classList.remove('opacity-0', 'pointer-events-none');
+          badgeText.textContent = phase.label;
+          badgeDot.style.backgroundColor = phase.color;
+        }
+      }
+    };
+
+    // Callback saat ledakan dahsyat memuncak: Munculkan teks WELCOME TO SIMBA
+    this.canvasEngine.onHeroReveal = () => {
+      if (heroContent) {
+        heroContent.classList.remove('welcome-hero-hidden');
+        heroContent.classList.add('welcome-hero-visible');
+      }
+      if (badge) {
+        badge.classList.add('opacity-0', 'pointer-events-none');
+      }
+      if (skipBtn) {
+        skipBtn.classList.add('hidden');
+      }
+      if (replayBtn) {
+        replayBtn.classList.remove('hidden');
+      }
+    };
+
+    // Tombol Lewati Intro: Langsung ke teks & erupsi aktif
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => {
+        this.canvasEngine.skipToActive();
+      });
+    }
+
+    // Tombol Putar Ulang Letusan: Reset ke gunung diam lalu meledak kembali
+    if (replayBtn) {
+      replayBtn.addEventListener('click', () => {
+        if (heroContent) {
+          heroContent.classList.remove('welcome-hero-visible');
+          heroContent.classList.add('welcome-hero-hidden');
+        }
+        if (replayBtn) replayBtn.classList.add('hidden');
+        if (skipBtn) skipBtn.classList.remove('hidden');
+        if (badge) badge.classList.remove('opacity-0', 'pointer-events-none');
+
+        this.canvasEngine.restartSequence();
+      });
     }
   }
 
@@ -68,7 +144,7 @@ class SimbaApp {
         const targetView = link.getAttribute('data-view');
         if (targetView) {
           e.preventDefault();
-          const targetHash = targetView === 'welcome' ? '#home' : (targetView === 'map' ? '#peta' : '#edukasi');
+          const targetHash = targetView === 'welcome' ? '#home' : (targetView === 'map' ? '#peta' : (targetView === 'news' ? '#berita' : '#edukasi'));
           window.location.hash = targetHash;
           this.navigateTo(targetView);
         }
@@ -227,6 +303,8 @@ class SimbaApp {
 
     if (hash === '#peta') {
       this.navigateTo('map');
+    } else if (hash === '#berita') {
+      this.navigateTo('news');
     } else if (hash === '#edukasi') {
       this.navigateTo('education');
     } else if (hash.startsWith('#gunung/')) {
@@ -279,6 +357,11 @@ class SimbaApp {
       if (this.canvasEngine) this.canvasEngine.stop();
       if (this.mapController) {
         this.mapController.invalidateSize();
+      }
+    } else if (viewName === 'news') {
+      if (this.canvasEngine) this.canvasEngine.stop();
+      if (this.newsEngine) {
+        this.newsEngine.init();
       }
     } else if (viewName === 'education') {
       if (this.canvasEngine) this.canvasEngine.stop();
