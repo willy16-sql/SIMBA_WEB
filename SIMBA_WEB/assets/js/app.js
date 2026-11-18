@@ -140,6 +140,26 @@ class SimbaApp {
       });
     });
 
+    // Filter Type Buttons (Semua / Aktif / Dorman)
+    const typeButtons = document.querySelectorAll('.filter-type-btn');
+    typeButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const type = e.currentTarget.getAttribute('data-type');
+        
+        typeButtons.forEach(b => {
+          b.classList.remove('bg-zinc-800', 'text-white', 'border-zinc-700');
+          b.classList.add('bg-zinc-900/90', 'text-zinc-400', 'border-zinc-800');
+        });
+
+        e.currentTarget.classList.remove('bg-zinc-900/90', 'text-zinc-400', 'border-zinc-800');
+        e.currentTarget.classList.add('bg-zinc-800', 'text-white', 'border-zinc-700');
+
+        if (this.mapController) {
+          this.mapController.setTypeFilter(type);
+        }
+      });
+    });
+
     // Live Search Gunung Api
     const searchInput = document.getElementById('volcano-search-input');
     const searchDropdown = document.getElementById('volcano-search-results');

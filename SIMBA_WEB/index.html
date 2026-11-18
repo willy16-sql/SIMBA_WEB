@@ -6,6 +6,12 @@
   <meta name="description" content="SIMBA - Sistem Informasi Bencana Gunung Berapi Indonesia. Portal Geoportal Sebaran Gunung Api, Status PVMBG 2026, Riwayat Letusan 2000-2026, dan Panduan Mitigasi Cepat.">
   <title>SIMBA - Sistem Informasi Bencana Gunung Berapi Indonesia</title>
 
+  <!-- Favicon (Logo Gunung Berapi SIMBA) -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon.png?v=4.0">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo-simba.svg?v=4.0">
+  <link rel="shortcut icon" href="favicon.ico?v=4.0">
+
   <!-- Google Fonts: Inter & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,8 +43,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
 
-  <!-- Custom Volcanic Dark Theme Styles (Cache-Busting v=3.2) -->
-  <link rel="stylesheet" href="assets/css/custom.css?v=3.2">
+  <!-- Custom Volcanic Dark Theme Styles (Cache-Busting v=4.0) -->
+  <link rel="stylesheet" href="assets/css/custom.css?v=4.0">
 </head>
 <body class="bg-[#0B0C10] text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
 
@@ -116,10 +122,10 @@
       <div class="absolute inset-0 z-0 bg-radial-gradient from-transparent via-[#0B0C10]/40 to-[#0B0C10] pointer-events-none"></div>
 
       <!-- Hero Content Foreground -->
-      <div class="relative z-10 max-w-4xl mx-auto py-12 flex flex-col items-center">
+      <div class="relative z-10 max-w-4xl mx-auto py-8 sm:py-10 flex flex-col items-center">
         
         <!-- Live Status Pill Badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-orange-500/40 shadow-[0_0_20px_rgba(255,87,34,0.2)] mb-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-orange-500/40 shadow-[0_0_20px_rgba(255,87,34,0.25)] mb-5">
           <span class="w-2.5 h-2.5 rounded-full bg-orange-500 animate-alert-pulse"></span>
           <span class="text-xs font-semibold text-zinc-300 tracking-wide uppercase">
             Portal Informasi Kebencanaan Gunung Berapi • 2026
@@ -127,43 +133,43 @@
         </div>
 
         <!-- Hero Title -->
-        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white font-heading tracking-tight leading-tight mb-4">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white font-heading tracking-tight leading-tight mb-3">
           WELCOME TO <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-amber-400">SIMBA</span>
         </h1>
 
         <!-- Subtitle -->
-        <p class="max-w-2xl text-base sm:text-lg text-zinc-300 leading-relaxed font-normal mb-8">
-          Sistem Informasi Bencana Gunung Berapi Indonesia. Pantau sebaran gunung api aktif secara interaktif, telusuri riwayat bencana letusan modern <strong>2000–2026</strong>, dan kuasai panduan mitigasi evakuasi resmi.
+        <p class="max-w-2xl text-base sm:text-lg text-zinc-300 leading-relaxed font-normal mb-7">
+          Sistem Informasi Bencana Gunung Berapi Indonesia. Pantau sebaran seluruh titik gunung api (aktif &amp; dorman) se-Nusantara, telusuri riwayat bencana letusan modern <strong>2000–2026</strong>, dan kuasai panduan mitigasi evakuasi resmi.
         </p>
 
         <!-- CTA Action Buttons -->
-        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-10">
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-8">
           <button id="btn-enter-map" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold text-sm sm:text-base transition duration-200 shadow-[0_0_30px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 animate-magma-pulse">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             <span>Masuk ke Peta Interaktif</span>
           </button>
           
-          <button id="btn-learn-ppt" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 font-semibold text-sm sm:text-base transition flex items-center justify-center gap-2.5">
+          <button id="btn-learn-ppt" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-700/80 text-zinc-200 font-semibold text-sm sm:text-base transition flex items-center justify-center gap-2.5">
             <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             <span>Pelajari Materi Edukasi PPT</span>
           </button>
         </div>
 
-        <!-- Quick Stats Cards Bar -->
+        <!-- Quick Stats Cards Bar (Glassmorphic) -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-3xl">
-          <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm">
-            <span class="text-2xl sm:text-3xl font-black text-white font-heading">127+</span>
-            <span class="text-xs text-zinc-400 block mt-0.5">Gunung Api Aktif</span>
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 backdrop-blur-md shadow-lg">
+            <span class="text-2xl sm:text-3xl font-black text-white font-heading">103</span>
+            <span class="text-xs text-zinc-400 block mt-0.5">Gunung Se-Indonesia</span>
           </div>
-          <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm">
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 backdrop-blur-md shadow-lg">
             <span class="text-2xl sm:text-3xl font-black text-orange-400 font-heading">2000-2026</span>
             <span class="text-xs text-zinc-400 block mt-0.5">Riwayat Erupsi</span>
           </div>
-          <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm">
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 backdrop-blur-md shadow-lg">
             <span class="text-2xl sm:text-3xl font-black text-red-400 font-heading">4 Level</span>
             <span class="text-xs text-zinc-400 block mt-0.5">Status PVMBG</span>
           </div>
-          <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm">
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 backdrop-blur-md shadow-lg">
             <span class="text-2xl sm:text-3xl font-black text-emerald-400 font-heading">&lt; 10 dtk</span>
             <span class="text-xs text-zinc-400 block mt-0.5">Panggil Darurat</span>
           </div>
@@ -197,10 +203,10 @@
           </div>
         </div>
 
-        <!-- Filter Tombol Cepat Status Vulkanik -->
+        <!-- Filter Bar 1: Status Vulkanik (PVMBG) -->
         <div class="flex items-center gap-1.5 overflow-x-auto py-1 px-1 bg-zinc-950/80 backdrop-blur-md border border-zinc-800/80 rounded-2xl shadow-lg scrollbar-none">
           <button data-status="all" class="filter-status-btn px-3 py-1 rounded-xl text-xs font-semibold bg-orange-500 text-white border border-orange-500 shadow-[0_0_12px_rgba(255,87,34,0.4)] whitespace-nowrap transition">
-            Semua
+            Semua Status
           </button>
           <button data-status="Awas" class="filter-status-btn px-2.5 py-1 rounded-xl text-xs font-semibold bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-red-500/50 hover:text-red-400 whitespace-nowrap transition flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-red-500 animate-alert-pulse"></span>
@@ -218,6 +224,24 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             Normal (I)
           </button>
+        </div>
+
+        <!-- Filter Bar 2: Kategori Keaktifan (Aktif vs Dorman) & Counter -->
+        <div class="flex items-center justify-between gap-2 py-1 px-2 bg-zinc-950/80 backdrop-blur-md border border-zinc-800/80 rounded-2xl shadow-lg">
+          <div class="flex items-center gap-1 overflow-x-auto scrollbar-none">
+            <button data-type="all" class="filter-type-btn px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-zinc-800 text-white border border-zinc-700 whitespace-nowrap transition">
+              Semua (103)
+            </button>
+            <button data-type="active" class="filter-type-btn px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-zinc-900/90 text-zinc-400 hover:text-white border border-zinc-800 whitespace-nowrap transition">
+              🌋 Aktif (Tipe A)
+            </button>
+            <button data-type="dormant" class="filter-type-btn px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-zinc-900/90 text-zinc-400 hover:text-white border border-zinc-800 whitespace-nowrap transition">
+              🏔️ Dorman / Tipe B&amp;C
+            </button>
+          </div>
+          <span id="map-volcano-count" class="text-[11px] text-orange-400 font-mono font-bold whitespace-nowrap hidden sm:inline">
+            103 Titik
+          </span>
         </div>
 
       </div>
@@ -241,6 +265,10 @@
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span class="text-zinc-300">Level I: Normal</span>
+          </div>
+          <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+            <span class="text-zinc-300">Tipe B/C: Dorman</span>
           </div>
         </div>
       </div>
@@ -339,20 +367,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 
-  <!-- Application Datasets (v=3.2) -->
-  <script src="assets/js/data/volcanoes.js?v=3.2"></script>
-  <script src="assets/js/data/slides-content.js?v=3.2"></script>
-  <script src="assets/js/data/emergency-contacts.js?v=3.2"></script>
+  <!-- Application Datasets (v=4.0) -->
+  <script src="assets/js/data/volcanoes.js?v=4.0"></script>
+  <script src="assets/js/data/slides-content.js?v=4.0"></script>
+  <script src="assets/js/data/emergency-contacts.js?v=4.0"></script>
 
-  <!-- Application Modules (v=3.2) -->
-  <script src="assets/js/canvas-eruption.js?v=3.2"></script>
-  <script src="assets/js/map.js?v=3.2"></script>
-  <script src="assets/js/detail.js?v=3.2"></script>
-  <script src="assets/js/slides.js?v=3.2"></script>
-  <script src="assets/js/emergency.js?v=3.2"></script>
+  <!-- Application Modules (v=4.0) -->
+  <script src="assets/js/canvas-eruption.js?v=4.0"></script>
+  <script src="assets/js/map.js?v=4.0"></script>
+  <script src="assets/js/detail.js?v=4.0"></script>
+  <script src="assets/js/slides.js?v=4.0"></script>
+  <script src="assets/js/emergency.js?v=4.0"></script>
 
-  <!-- App Bootstrap (v=3.2) -->
-  <script src="assets/js/app.js?v=3.2"></script>
+  <!-- App Bootstrap (v=4.0) -->
+  <script src="assets/js/app.js?v=4.0"></script>
 
 </body>
 </html>
