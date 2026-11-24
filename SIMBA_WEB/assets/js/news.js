@@ -130,16 +130,17 @@ class SimbaNewsEngine {
         ? 'bg-red-500 text-white animate-alert-pulse' 
         : (n.status_level === 3 ? 'bg-orange-500 text-white' : 'bg-yellow-500 text-zinc-900');
 
-      const coverImg = (n.dokumentasi && n.dokumentasi.length > 0)
-        ? n.dokumentasi[0].url
-        : 'assets/images/logo-simba.svg';
+      const firstDoc = (n.dokumentasi && n.dokumentasi.length > 0) ? n.dokumentasi[0] : null;
+      const coverImg = firstDoc ? firstDoc.url : 'assets/images/logo-simba.svg';
+      const fallbackUrl = (firstDoc && firstDoc.fallback) ? firstDoc.fallback : (firstDoc && firstDoc.svg ? firstDoc.svg : 'assets/images/logo-simba.svg');
+      const svgUrl = (firstDoc && firstDoc.svg) ? firstDoc.svg : 'assets/images/logo-simba.svg';
 
       return `
         <article class="w-full flex flex-col lg:flex-row bg-zinc-950/90 border border-zinc-800/90 hover:border-orange-500/60 rounded-3xl overflow-hidden shadow-2xl hover:shadow-[0_0_30px_rgba(255,87,34,0.18)] transition duration-300 group">
           
           <!-- SISI KIRI: Foto & Dokumentasi Visual (Landscape Horizontal) -->
           <div class="relative w-full lg:w-[380px] xl:w-[420px] h-60 lg:h-auto shrink-0 overflow-hidden bg-zinc-900 flex items-center justify-center">
-            <img src="${coverImg}" alt="${n.judul}" onerror="this.onerror=null; this.src='assets/images/logo-simba.svg';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <img src="${coverImg}" alt="${n.judul}" onerror="if(this.src!=='${fallbackUrl}'){this.src='${fallbackUrl}';}else if(this.src!=='${svgUrl}'){this.src='${svgUrl}';}else{this.src='assets/images/logo-simba.svg';}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
             <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-zinc-950/80 via-transparent to-transparent"></div>
             
             <!-- Badges di atas gambar -->
@@ -155,7 +156,7 @@ class SimbaNewsEngine {
             <!-- Foto Count Pill -->
             <div class="absolute bottom-4 left-4 px-3 py-1 rounded-xl bg-zinc-950/85 backdrop-blur-md border border-zinc-800 text-xs font-medium text-zinc-300 flex items-center gap-1.5 shadow-md">
               <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              <span>${n.dokumentasi.length} Dokumentasi Visual</span>
+              <span>${n.dokumentasi.length} Foto Bukti Kejadian</span>
             </div>
           </div>
 
@@ -279,17 +280,21 @@ class SimbaNewsEngine {
     if (!modalContent || !modalWrapper || !backdrop) return;
 
     // Gallery Photos HTML
-    const galleryHtml = item.dokumentasi.map((d) => `
+    const galleryHtml = item.dokumentasi.map((d) => {
+      const fallbackUrl = d.fallback || d.svg || 'assets/images/logo-simba.svg';
+      const svgUrl = d.svg || 'assets/images/logo-simba.svg';
+      return `
       <div class="rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800/80 space-y-2">
         <div class="h-52 sm:h-60 overflow-hidden bg-zinc-900">
-          <img src="${d.url}" alt="${d.caption}" onerror="this.onerror=null; this.src='assets/images/logo-simba.svg';" class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer" onclick="window.open('${d.url}', '_blank')">
+          <img src="${d.url}" alt="${d.caption}" onerror="if(this.src!=='${fallbackUrl}'){this.src='${fallbackUrl}';}else if(this.src!=='${svgUrl}'){this.src='${svgUrl}';}else{this.src='assets/images/logo-simba.svg';}" class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer" onclick="window.open(this.src, '_blank')">
         </div>
         <div class="p-3.5">
           <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30 uppercase">${d.tipe}</span>
           <p class="text-xs text-zinc-300 mt-1.5 leading-relaxed">${d.caption}</p>
         </div>
       </div>
-    `).join('');
+      `;
+    }).join('');
 
     // Timeline Chronology HTML
     const chronoHtml = item.kronologi.map(k => `

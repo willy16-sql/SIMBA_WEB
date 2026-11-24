@@ -51,7 +51,8 @@ class VolcanicEruptionEngine {
     this.shakeMagnitude = 0;   // Screen tremor/shake
     this.lastLightningTime = 0;
 
-    // Audio synthesizer context
+    // Audio synthesizer context & sound preference
+    this.soundEnabled = localStorage.getItem('simba_sound_enabled') !== 'false';
     this.audioCtx = null;
     this.hasPlayedExplosionSound = false;
 
@@ -91,11 +92,48 @@ class VolcanicEruptionEngine {
     }
   }
 
-  // --- AUDIO SYNTHESIZER (NOISE BOOM + LOWPASS FILTER) ---
+  // --- AUDIO SYNTHESIZER & SOUND CONTROLLER ---
+  toggleSound() {
+    this.soundEnabled = !this.soundEnabled;
+    localStorage.setItem('simba_sound_enabled', this.soundEnabled ? 'true' : 'false');
+
+    if (this.soundEnabled) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          if (!this.audioCtx) this.audioCtx = new AudioCtx();
+          if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+        }
+      } catch (e) {}
+    }
+    return this.soundEnabled;
+  }
+
   playExplosionAudio() {
-    if (this.hasPlayedExplosionSound) return;
+    if (!this.soundEnabled || this.hasPlayedExplosionSound) return;
     this.hasPlayedExplosionSound = true;
 
+    // 1. Putar file audio fisik letusan (eruption.wav / eruption.mp3)
+    try {
+      const audio = new Audio('assets/audio/eruption.wav');
+      audio.volume = 0.9;
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          return;
+        }).catch(() => {
+          // Fallback ke audio generator bawaan jika autoplay dibatasi
+          this.synthesizeVolcanicBoom();
+        });
+      } else {
+        this.synthesizeVolcanicBoom();
+      }
+    } catch (e) {
+      this.synthesizeVolcanicBoom();
+    }
+  }
+
+  synthesizeVolcanicBoom() {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
@@ -106,18 +144,18 @@ class VolcanicEruptionEngine {
 
       const ctx = this.audioCtx;
       const now = ctx.currentTime;
-      const duration = 3.0;
+      const duration = 3.2;
       const bufferSize = ctx.sampleRate * duration;
       const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = noiseBuffer.getChannelData(0);
 
-      // Generate brown/pink noise
+      // Generate brown/pink volcanic noise
       let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
         output[i] = (lastOut + (0.025 * white)) / 1.025;
         lastOut = output[i];
-        output[i] *= 3.5;
+        output[i] *= 3.8;
       }
 
       const noise = ctx.createBufferSource();
@@ -126,13 +164,13 @@ class VolcanicEruptionEngine {
       // Resonant Lowpass Filter for Deep Volcanic Rumble
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(380, now);
-      filter.frequency.exponentialRampToValueAtTime(55, now + 2.5);
+      filter.frequency.setValueAtTime(420, now);
+      filter.frequency.exponentialRampToValueAtTime(50, now + 2.8);
 
       // Gain Envelope (Sharp Attack "BOOM/DUARRR" -> Slow Deep Rumble)
       const gain = ctx.createGain();
       gain.gain.setValueAtTime(0.01, now);
-      gain.gain.linearRampToValueAtTime(0.85, now + 0.06);
+      gain.gain.linearRampToValueAtTime(0.95, now + 0.06);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
       noise.connect(filter);

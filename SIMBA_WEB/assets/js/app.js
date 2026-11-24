@@ -114,6 +114,40 @@ class SimbaApp {
       }
     };
 
+    // Tombol Toggle Efek Suara (Audio On / Off)
+    const soundBtn = document.getElementById('btn-sound-toggle');
+    const soundIcon = document.getElementById('sound-toggle-icon');
+    const soundLabel = document.getElementById('sound-toggle-label');
+
+    const updateSoundUI = (enabled) => {
+      if (soundIcon && soundLabel) {
+        soundIcon.textContent = enabled ? '🔊' : '🔇';
+        soundLabel.textContent = enabled ? 'Suara: ON' : 'Suara: OFF';
+      }
+      if (soundBtn) {
+        if (enabled) {
+          soundBtn.classList.remove('text-zinc-500', 'border-zinc-800');
+          soundBtn.classList.add('text-orange-400', 'border-orange-500/40');
+        } else {
+          soundBtn.classList.remove('text-orange-400', 'border-orange-500/40');
+          soundBtn.classList.add('text-zinc-500', 'border-zinc-800');
+        }
+      }
+    };
+
+    if (this.canvasEngine) {
+      updateSoundUI(this.canvasEngine.soundEnabled);
+    }
+
+    if (soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        if (this.canvasEngine) {
+          const isNowOn = this.canvasEngine.toggleSound();
+          updateSoundUI(isNowOn);
+        }
+      });
+    }
+
     // Tombol Lewati Intro: Langsung ke teks & erupsi aktif
     if (skipBtn) {
       skipBtn.addEventListener('click', () => {
